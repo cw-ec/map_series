@@ -6,13 +6,6 @@ import errno
 import logging
 from pathlib import Path
 from shutil import copyfile
-# ------------------------------------
-# Inputs
-
-ddir = r'C:\map_series\data\MS_ExportedMaps\Dump_AllMaps'
-sdir = r'C:\map_series\data\MS_ExportedMaps\sorted'
-
-# -----------------------------------
 
 
 class MapPdfSort:
@@ -20,6 +13,18 @@ class MapPdfSort:
     """
     Takes the dump directory from the map series and organizes it according to the map series file structure
     """
+
+    def loggingSetup(self):
+        # Sets up logging
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s [%(levelname)s] %(message)s",
+            handlers=[
+                logging.FileHandler("test_log.log"),
+                logging.StreamHandler(sys.stdout)
+            ]
+        )
+        return logging.getLogger()
 
     def map_sorting(self):
         """
@@ -37,7 +42,7 @@ class MapPdfSort:
             out_pdf_path = os.path.join(self.sdir, fed, self.poll_type[ptype])
             # Make sure output path exists. Create if needed
             Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
-            logger.info(f"Sorting: {file.name}")
+            self.logger.info(f"Sorting: {file.name}")
             copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, file.name))
 
     def consolidate_maps(self, subfolders=('ADV', 'PollDay'), combo_name='consolidated'):
@@ -55,11 +60,11 @@ class MapPdfSort:
         # Subdirectories in the input directory are expected to be FED numbers in keeping with the folder structure
         for fed in os.listdir(self.sdir):
 
-            root = os.path.join(sdir, fed)
+            root = os.path.join(self.sdir, fed)
 
             for f in subfolders:
 
-                logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
+                self.logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
                 croot = os.path.join(root, f)
                 to_merge = glob.glob(os.path.join(croot, '*.pdf'))
 
@@ -78,7 +83,8 @@ class MapPdfSort:
 
     def __init__(self, dump_dir, sorted_dir) -> None:
 
-        logger.info(f"Sorting all PDF maps in: {dump_dir}")
+        self.logger = self.loggingSetup()
+        self.logger.info(f"Sorting all PDF maps in: {dump_dir}")
         # Set Class Vars
         self.poll_type = {'A': 'ADV',
                           'P': 'PollDay'}
@@ -87,25 +93,17 @@ class MapPdfSort:
         self.sdir = sorted_dir
 
         # Run process
-        logger.info("Sorting maps in input directory")
+        self.logger.info("Sorting maps in input directory")
         self.map_sorting()
-        logger.info("Consolidating maps in designated folders")
+        self.logger.info("Consolidating maps in designated folders")
         self.consolidate_maps()
+        self.logger.info("DONE!")
 
 
 if __name__ == '__main__':
-    # Sets up logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler("test_log.log"),
-            logging.StreamHandler(sys.stdout)
-        ]
-    )
-    logger = logging.getLogger()
+    # Config for testing
+
     MapPdfSort(r"C:\map_series\data\MS_ExportedMaps\Dump_AllMaps", sorted_dir=sdir)
-    logger.info("DONE!")
 
 
 
