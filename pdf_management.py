@@ -40,10 +40,10 @@ class MapPdfSort:
             logger.info(f"Sorting: {file.name}")
             copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, file.name))
 
-    def consolidate_maps(self, combo_name='combined'):
-        '''Consolidates all pdf maps in a given folder into one master file'''
+    def consolidate_maps(self, subfolders=('ADV', 'PollDay'), combo_name='consolidated'):
+        """Consolidates all pdf maps in a given directory and subdirectories into one master file per (sub)directory"""
 
-        def silentremove(filename):
+        def silent_remove(filename):
             try:
                 os.remove(filename)
             except OSError as e:  # this would be "except OSError, e:" before Python 2.6
@@ -52,9 +52,14 @@ class MapPdfSort:
 
         combo_ext = f'{combo_name}.pdf'
 
+        # Subdirectories in the input directory are expected to be FED numbers in keeping with the folder structure
         for fed in os.listdir(self.sdir):
+
             root = os.path.join(sdir, fed)
-            for f in ['ADV', 'PollDay']:
+
+            for f in subfolders:
+
+                logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
                 croot = os.path.join(root, f)
                 to_merge = glob.glob(os.path.join(croot, '*.pdf'))
 
@@ -65,8 +70,9 @@ class MapPdfSort:
                     if os.path.split(pdf)[-1] == combo_ext:
                         continue
                     merger.append(pdf)
+
                 out_path = os.path.join(croot, combo_ext)
-                silentremove(out_path)
+                silent_remove(out_path) # Remove the consolidated pdf if it already exists
                 merger.write(out_path)
                 merger.close()
 
@@ -99,6 +105,7 @@ if __name__ == '__main__':
     )
     logger = logging.getLogger()
     MapPdfSort(r"C:\map_series\data\MS_ExportedMaps\Dump_AllMaps", sorted_dir=sdir)
+    logger.info("DONE!")
 
 
 
