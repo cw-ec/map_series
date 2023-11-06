@@ -38,12 +38,17 @@ class MapPdfSort:
 
             ptype = file.name.split('_')[0]
             fed = file.name.split('_')[1]
+            suffix = file.name.split('_')[2]
+
+            # Add a 0 for sorting purposes if the suffix of the file name looks like this: 'A1' -> 'A01'
+            if (suffix.split('.')[0][0].isalpha()) and (len(suffix.split('.')[0]) == 2):
+                suffix = f"{suffix.split('.')[0][0]}0{suffix.split('.')[0][1]}"
 
             out_pdf_path = os.path.join(self.sdir, fed, self.poll_type[ptype])
             # Make sure output path exists. Create if needed
             Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
             self.logger.info(f"Sorting: {file.name}")
-            copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, file.name))
+            copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
 
     def consolidate_maps(self, subfolders=('ADV', 'PollDay'), combo_name='consolidated'):
         """Consolidates all pdf maps in a given directory and subdirectories into one master file per (sub)directory"""
@@ -55,8 +60,6 @@ class MapPdfSort:
                 if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory
                     raise  # re-raise exception if a different error occurred
 
-        combo_ext = f'{combo_name}.pdf'
-
         # Subdirectories in the input directory are expected to be FED numbers in keeping with the folder structure
         for fed in os.listdir(self.sdir):
 
@@ -65,18 +68,19 @@ class MapPdfSort:
             for f in subfolders:
 
                 self.logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
-                croot = os.path.join(root, f)
-                to_merge = glob.glob(os.path.join(croot, '*.pdf'))
+                c_root = os.path.join(root, f)
+                to_merge = glob.glob(os.path.join(c_root, '*.pdf'))
 
                 # Merge and export the combined pdf files
                 merger = PyPDF2.PdfMerger()
+                combo_ext = f'{f}{combo_name}.pdf'
                 for pdf in to_merge:
                     # Don't want to combine prior combo pdfs
                     if os.path.split(pdf)[-1] == combo_ext:
                         continue
                     merger.append(pdf)
 
-                out_path = os.path.join(croot, combo_ext)
+                out_path = os.path.join(c_root, combo_ext)
                 silent_remove(out_path) # Remove the consolidated pdf if it already exists
                 merger.write(out_path)
                 merger.close()
@@ -95,6 +99,7 @@ class MapPdfSort:
         # Run process
         self.logger.info("Sorting maps in input directory")
         self.map_sorting()
+
         self.logger.info("Consolidating maps in designated folders")
         self.consolidate_maps()
         self.logger.info("DONE!")
@@ -102,8 +107,10 @@ class MapPdfSort:
 
 if __name__ == '__main__':
     # Config for testing
+    sdir = r"C:\map_series\data\MS_ExportedMaps\sorted"
+    ddir = r"C:\map_series\data\MS_ExportedMaps\Dump_AllMaps"
 
-    MapPdfSort(r"C:\map_series\data\MS_ExportedMaps\Dump_AllMaps", sorted_dir=sdir)
+    MapPdfSort(dump_dir=ddir, sorted_dir=sdir) # Test Call
 
 
 
