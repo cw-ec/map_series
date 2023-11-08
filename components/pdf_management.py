@@ -5,7 +5,8 @@ import os
 import errno
 import logging
 from pathlib import Path
-from shutil import copyfile
+from shutil import copyfile, rmtree, make_archive
+from datetime import datetime
 
 
 class MapPdfSort:
@@ -20,11 +21,12 @@ class MapPdfSort:
             level=logging.INFO,
             format="%(asctime)s [%(levelname)s] %(message)s",
             handlers=[
-                logging.FileHandler("test_log.log"),
+                logging.FileHandler(f"{datetime.today().strftime('%d-%m-%Y')}_log.log"),
                 logging.StreamHandler(sys.stdout)
             ]
         )
         return logging.getLogger()
+
 
     def map_sorting(self):
         """
@@ -64,12 +66,14 @@ class MapPdfSort:
         for fed in os.listdir(self.sdir):
 
             root = os.path.join(self.sdir, fed)
+            combo_dir = f'{fed}_consolidated'
+            out_base = os.path.join(root, combo_dir)
 
             for f in subfolders:
 
                 self.logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
-                c_root = os.path.join(root, f)
-                to_merge = glob.glob(os.path.join(c_root, '*.pdf'))
+                sub_folder = os.path.join(root, f)
+                to_merge = glob.glob(os.path.join(sub_folder, '*.pdf'))
 
                 # Merge and export the combined pdf files
                 merger = PyPDF2.PdfMerger()
@@ -80,10 +84,20 @@ class MapPdfSort:
                         continue
                     merger.append(pdf)
 
-                out_path = os.path.join(c_root, combo_ext)
-                silent_remove(out_path) # Remove the consolidated pdf if it already exists
+                out_path = os.path.join(out_base, combo_ext)
+                Path(out_base).mkdir(parents=True, exist_ok=True)
+                silent_remove(out_path)  # Remove the consolidated pdf if it already exists
                 merger.write(out_path)
                 merger.close()
+
+                self.logger.info(f'Removing {f}')
+                rmtree(sub_folder)
+
+            # Make a .zip of the consolidated folder and delete the original
+            #if os.path.exists(f'{combo_dir}.zip'):
+                #rmtree(f'{combo_dir}.zip')
+            make_archive(combo_dir, 'zip')
+            rmtree(combo_dir)
 
     def __init__(self, dump_dir, sorted_dir) -> None:
 
