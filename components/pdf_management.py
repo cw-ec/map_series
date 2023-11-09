@@ -83,7 +83,8 @@ class MapPdfSort:
             #if os.path.exists(f'{combo_dir}.zip'):
                 #rmtree(f'{combo_dir}.zip')
             make_archive(combo_dir, 'zip')
-            rmtree(combo_dir)
+            if os.path.exists(combo_dir):
+                rmtree(combo_dir)
 
     def __init__(self, dump_dir, sorted_dir) -> None:
 

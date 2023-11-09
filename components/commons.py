@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 
-def logging_setup(log_dir=os.path.curdir) -> logging.getLogger():
+def logging_setup(log_dir=".\\"):
     """Sets up logging takes one parameter to set a directory for the output log file"""
 
     logging.basicConfig(

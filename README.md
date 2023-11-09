@@ -15,16 +15,16 @@ To operate a tool follow these instructions:
     
 1. Select the appropriate .py file from the main folder of this repository and open it in the IDE of your choice 
 (Notepad++ is a good alternative if no traditional IDE is available).
-2. Alter the parameters if the inputs referring to the infile descriptions of the parameters as needed
+2. Alter the parameters referring to the descriptions within the .py file or in this document as needed.
 3. If running the file from a traditional IDE run the file as normal. If one is not available to you see the directions
-below.
+for running the file from the command line below.
 
    - Open the search window from the bottom right of your screen and search for 'Python Command Prompt'
    - Ensure that the python environment 
    - Using the 'cd' command navigate to the main folder of this repository
    - Run the workflow if your choice using the following command format: python 'name of python file'.py
 
-## Component 1: Export Maps as PDF files
+## Component 1: PDF Map Production and Post Processing
 
 This component contain scripts designed to produce and manipulate pdf files of the maps produced by map series.
 
