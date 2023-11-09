@@ -3,10 +3,9 @@ import PyPDF2
 import glob
 import os
 import errno
-import logging
 from pathlib import Path
 from shutil import copyfile, rmtree, make_archive
-from datetime import datetime
+from components import logging_setup
 
 
 class MapPdfSort:
@@ -14,19 +13,6 @@ class MapPdfSort:
     """
     Takes the dump directory from the map series and organizes it according to the map series file structure
     """
-
-    def loggingSetup(self):
-        # Sets up logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format="%(asctime)s [%(levelname)s] %(message)s",
-            handlers=[
-                logging.FileHandler(f"{datetime.today().strftime('%d-%m-%Y')}_log.log"),
-                logging.StreamHandler(sys.stdout)
-            ]
-        )
-        return logging.getLogger()
-
 
     def map_sorting(self):
         """
@@ -101,7 +87,7 @@ class MapPdfSort:
 
     def __init__(self, dump_dir, sorted_dir) -> None:
 
-        self.logger = self.loggingSetup()
+        self.logger = logging_setup()
         self.logger.info(f"Sorting all PDF maps in: {dump_dir}")
         # Set Class Vars
         self.poll_type = {'A': 'ADV',
@@ -124,7 +110,7 @@ if __name__ == '__main__':
     sdir = r"C:\map_series\data\MS_ExportedMaps\sorted"
     ddir = r"C:\map_series\data\MS_ExportedMaps\Dump_AllMaps"
 
-    MapPdfSort(dump_dir=ddir, sorted_dir=sdir) # Test Call
+    MapPdfSort(dump_dir=ddir, sorted_dir=sdir)  # Test Call
 
 
 

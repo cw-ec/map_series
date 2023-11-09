@@ -1,6 +1,6 @@
 # Map Series
 
- The purpose of this repository is for development and testing various components of the map series proof of concept(PoC).
+ The purpose of this repository is for development and testing various components of the map series proof of concept (PoC).
 More documentation to be added as development progresses.
 
 ### Requirements
@@ -41,5 +41,9 @@ be accessed via the pdf_manager.py script which takes the following parameters:
 ## Component 2: Data Downloads and Updates
 
 This component consists of script designed to download data and make it usable for ArcGIS Pro and Map Series. Scripts 
-in this component may injest internal or external datasets clean and prep them to a format best suited for the map 
+in this component may ingest internal or external datasets clean and prep them to a format best suited for the map 
 series project.
+
+### Update PlaceNames
+
+This script downloads and preprocesses the NRCan place names dataset for use in map creation.
