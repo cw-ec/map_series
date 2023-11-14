@@ -26,11 +26,11 @@ class MapPdfSort:
 
             ptype = file.name.split('_')[0]
             fed = file.name.split('_')[1]
-            suffix = file.name.split('_')[2]
+            suffix = file.name.split('_')[2].split('.')[0]
 
             # Add a 0 for sorting purposes if the suffix of the file name looks like this: 'A1' -> 'A01'
-            if (suffix.split('.')[0][0].isalpha()) and (len(suffix.split('.')[0]) == 2):
-                suffix = f"{suffix.split('.')[0][0]}0{suffix.split('.')[0][1]}"
+            if (suffix.split('.')[0][0].isalpha()) and (len(suffix) == 2):
+                suffix = f"{suffix[0]}0{suffix[1]}"
 
             out_pdf_path = os.path.join(self.sdir, fed, self.poll_type[ptype])
             # Make sure output path exists. Create if needed
@@ -100,7 +100,7 @@ class PDFConsolidator:
                 merger.write(out_path)
                 merger.close()
 
-            make_archive(out_base, 'zip', root_dir=out_base)
+            make_archive(os.path.join(self.out_dir, str(fed)), 'zip', root_dir=out_base)
             if os.path.exists(out_base):
                 rmtree(out_base)
 
@@ -109,6 +109,9 @@ class PDFConsolidator:
         # Settable Inputs
         self.in_dir = in_dir
         self.feds_to_consolidate = feds_to_combo
+
+        # Set output directory at root level of input directory
+        self.out_dir = os.path.join(self.in_dir, 'consolidated')
 
         # Setup Logging and Run the process
         self.logger = logging_setup()
