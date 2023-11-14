@@ -119,7 +119,7 @@ if __name__ == "__main__":
 
     PDFConsolidator(
         in_dir=".\\data\\sorted",
-        feds_to_combo=[24002, 24013]
+        # feds_to_combo=[24002, 24013]
     )
 
 

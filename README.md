@@ -19,7 +19,7 @@ To operate a tool follow these instructions:
 3. If running the file from a traditional IDE run the file as normal. If one is not available to you see the directions
 for running the file from the command line below.
 
-   - Open the search window from the bottom right of your screen and search for 'Python Command Prompt'
+   - Open the search window from the bottom left of your screen and search for 'Python Command Prompt'
 
      ![Python Command Prompt Search](./docs/imgs/PCP_img.png)
    - Ensure that the python environment is the default arcgis pro python env. This is usually named something like 
