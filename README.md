@@ -20,9 +20,19 @@ To operate a tool follow these instructions:
 for running the file from the command line below.
 
    - Open the search window from the bottom right of your screen and search for 'Python Command Prompt'
-   - Ensure that the python environment 
+
+     ![Python Command Prompt Search](./docs/imgs/PCP_img.png)
+   - Ensure that the python environment is the default arcgis pro python env. This is usually named something like 
+   'arcgispro-py3' and should be seen in the brackets in the far left of the command prompt window as seen below.
+   
+     <img alt="Python Command Prompt correctly formatted" height="150" src="./docs/imgs/PCP_base.png" width="800"/>
    - Using the 'cd' command navigate to the main folder of this repository
-   - Run the workflow if your choice using the following command format: python 'name of python file'.py
+   
+     <img alt="Python Command Prompt correctly formatted" height="100" src="./docs/imgs/PCP_correct_dir.png" width="800"/>
+   - Run the workflow if your choice using the following command format: python 'name of python file'.py This should
+   trigger your desired workflow to start running. If an error is returned instead verify the prior steps and try again.
+
+     <img alt="Python Command Prompt Search" height="150" src="./docs/imgs/PCP_run_workflow.png" width="800"/>
 
 ## Component 1: PDF Map Production and Post Processing
 
@@ -33,10 +43,23 @@ This component contain scripts designed to produce and manipulate pdf files of t
 This workflow sorts and creates consolidated versions of the exported pdf maps produced by map series. This workflow can 
 be accessed via the pdf_manager.py script which takes the following parameters:
 
-| Name       | Type   | Description                                                                                                                                                                                              |
-|------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| dump_dir   | string | This is the path to the folder containing all the pdf files exported from map series. All pdfs in this folder must meet the required naming convention in order to be properly processed by this script. |
-| sorted_dir | string | This should be the path to the destination folder for the pdfs. It can either be empty or contain outputs from a previous run of this script.                                                            |
+| Name       | Type   | Required | Description                                                                                                                                                                                              |
+|------------|--------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| dump_dir   | string | True     | This is the path to the folder containing all the pdf files exported from map series. All pdfs in this folder must meet the required naming convention in order to be properly processed by this script. |
+| sorted_dir | string | True     | This should be the path to the destination folder for the pdfs. It can either be empty or contain outputs from a previous run of this script.                                                            |
+
+### PDF Consolidation
+
+This workflow consolidates pdf files based on the approved map series folder structure and exports them into a zipfile
+at the root of the directory that shares its FED Number.
+
+This workflow takes the following parameters:
+
+| Name          | Type           | Required | Description                                                                                                                                                     |
+|---------------|----------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| in_dir        | string         | True     | Path to the directory that contains all pdfs to be consolidated. Must be organized into the approved file structure for the map series project.                 |
+| feds_to_combo | array(integer) | False    | This optional parameter should be and array of FED numbers as integers. Only pdfs in folders with this name will be consolidated when this parameter is filled. |
+
 
 ## Component 2: Data Downloads and Updates
 
@@ -46,4 +69,12 @@ series project.
 
 ### Update PlaceNames
 
-This script downloads and preprocesses the NRCan place names dataset for use in map creation.
+This script downloads and preprocesses the NRCan place names dataset for use in map creation. Not in full working order but 
+a skeleton for future development has been implemented in this repository as an example. 
+
+| Name         | Type   | Required | Description                                                                                                     |
+|--------------|--------|----------|-----------------------------------------------------------------------------------------------------------------|
+| geo_name_url | string | True     | This parameter is the url to the online zipfile that is to be downloaded and processed.                         |
+| output_gdb   | string | True     | The gdb  in which the output feature classes will be placed. Should be preexisting.                             |
+| fed_num_fc   | String | True     | The full path to the feature class or shapefile that contains the FED data to be joined to the downloaded data. |
+
