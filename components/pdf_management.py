@@ -38,54 +38,6 @@ class MapPdfSort:
             self.logger.info(f"Sorting: {file.name}")
             copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
 
-    def consolidate_maps(self, subfolders=('ADV', 'PollDay'), combo_name='consolidated'):
-        """Consolidates all pdf maps in a given directory and subdirectories into one master file per (sub)directory"""
-
-        def silent_remove(filename):
-            try:
-                os.remove(filename)
-            except OSError as e:  # this would be "except OSError, e:" before Python 2.6
-                if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory
-                    raise  # re-raise exception if a different error occurred
-
-        # Subdirectories in the input directory are expected to be FED numbers in keeping with the folder structure
-        for fed in os.listdir(self.sdir):
-
-            root = os.path.join(self.sdir, fed)
-            combo_dir = f'{fed}_consolidated'
-            out_base = os.path.join(root, combo_dir)
-
-            for f in subfolders:
-
-                self.logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
-                sub_folder = os.path.join(root, f)
-                to_merge = glob.glob(os.path.join(sub_folder, '*.pdf'))
-
-                # Merge and export the combined pdf files
-                merger = PyPDF2.PdfMerger()
-                combo_ext = f'{f}{combo_name}.pdf'
-                for pdf in to_merge:
-                    # Don't want to combine prior combo pdfs
-                    if os.path.split(pdf)[-1] == combo_ext:
-                        continue
-                    merger.append(pdf)
-
-                out_path = os.path.join(out_base, combo_ext)
-                Path(out_base).mkdir(parents=True, exist_ok=True)
-                silent_remove(out_path)  # Remove the consolidated pdf if it already exists
-                merger.write(out_path)
-                merger.close()
-
-                self.logger.info(f'Removing {f}')
-                rmtree(sub_folder)
-
-            # Make a .zip of the consolidated folder and delete the original
-            #if os.path.exists(f'{combo_dir}.zip'):
-                #rmtree(f'{combo_dir}.zip')
-            make_archive(combo_dir, 'zip')
-            if os.path.exists(combo_dir):
-                rmtree(combo_dir)
-
     def __init__(self, dump_dir, sorted_dir) -> None:
 
         self.logger = logging_setup()
@@ -101,18 +53,73 @@ class MapPdfSort:
         self.logger.info("Sorting maps in input directory")
         self.map_sorting()
 
-        self.logger.info("Consolidating maps in designated folders")
-        self.consolidate_maps()
         self.logger.info("DONE!")
 
 
-if __name__ == '__main__':
-    # Config for testing
-    sdir = r"C:\map_series\data\MS_ExportedMaps\sorted"
-    ddir = r"C:\map_series\data\MS_ExportedMaps\Dump_AllMaps"
+class PDFConsolidator:
 
-    MapPdfSort(dump_dir=ddir, sorted_dir=sdir)  # Test Call
+    def consolidate_maps(self, sub_folders=('ADV', 'PollDay'), combo_name='consolidated'):
+        """Consolidates all pdf maps in a given directory and subdirectories into one master file per (sub)directory"""
+
+        def silent_remove(filename):
+            try:
+                os.remove(filename)
+            except OSError as e:  # this would be "except OSError, e:" before Python 2.6
+                if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory
+                    raise  # re-raise exception if a different error occurred
+
+        # Subdirectories in the input directory are expected to be FED numbers in keeping with the folder structure
+        for fed in os.listdir(self.in_dir):
+
+            root = os.path.join(self.in_dir, fed)
+            combo_dir = f'{fed}_consolidated'
+            out_base = os.path.join(root, combo_dir)
+
+            if (len(self.feds_to_consolidate) > 0) and (int(fed) not in self.feds_to_consolidate):
+                continue
+
+            for f in sub_folders:
+
+                self.logger.info(f"Consolidating PDFs for FED: {fed} Folder: {f}")
+                sub_folder = os.path.join(root, f)
+                to_merge = glob.glob(os.path.join(sub_folder, '*.pdf'))
+
+                # Merge and export the combined pdf files
+                merger = PyPDF2.PdfFileMerger()
+                combo_ext = f'{f}{combo_name}.pdf'
+                for pdf in to_merge:
+                    # Don't want to combine prior combo pdfs
+                    if os.path.split(pdf)[-1] == combo_ext:
+                        continue
+                    merger.append(pdf)
+
+                # Export the consolidated pdf
+                out_path = os.path.join(out_base, combo_ext)
+                Path(out_base).mkdir(parents=True, exist_ok=True)
+                silent_remove(out_path)  # Remove the consolidated pdf if it already exists
+                merger.write(out_path)
+                merger.close()
+
+            make_archive(out_base, 'zip', root_dir=out_base)
+            if os.path.exists(out_base):
+                rmtree(out_base)
+
+    def __init__(self, in_dir, feds_to_combo=()):
+
+        # Settable Inputs
+        self.in_dir = in_dir
+        self.feds_to_consolidate = feds_to_combo
+
+        # Setup Logging and Run the process
+        self.logger = logging_setup()
+        self.consolidate_maps()
 
 
+if __name__ == "__main__":
+
+    PDFConsolidator(
+        in_dir=".\\data\\sorted",
+        feds_to_combo=[24002, 24013]
+    )
 
 
