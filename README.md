@@ -38,6 +38,21 @@ for running the file from the command line below.
 
 This component contain scripts designed to produce and manipulate pdf files of the maps produced by map series.
 
+### APRX to PDF
+
+This workflow takes a .aprx file containing a map series and exports the maps as individual pdf files following the 
+approved naming convention: "FEDCount_PollType_MapType". If not following this naming convention the .aprx file will not
+be processed. The script outputs pdf files with the following naming convention: "PollType_FedNum_InsetType/PageNum".
+The main script for this workflow is called aprx_to_pdf.py and it takes the following parameters:
+
+| Name      | Type    | Required | Description                                                                                                                                                                                                        |
+|-----------|---------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| aprx_path | String  | True     | This parameter is the path to the .aprx file that contains the maps to be exported.                                                                                                                                |
+| out_dir   | String  | True     | This Parameter should link to the directory will take the exported maps. If maps of a matching name are present in the file then they will be overwritten by the new maps.                                         |
+| as_image  | Boolean | True     | This optional parameter determines if the maps is exported as vector graphics or as an image. This isfor specific cases where the basemap does not render properly in the PDF. The default value of this is False. |
+| dpi       | Integer | True     | This optional parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 300.                                                                                  |
+
+
 ### PDF Management
 
 This workflow sorts and creates consolidated versions of the exported pdf maps produced by map series. This workflow can 
