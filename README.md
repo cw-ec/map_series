@@ -52,7 +52,6 @@ The main script for this workflow is called aprx_to_pdf.py and it takes the foll
 | as_image  | Boolean | True     | This optional parameter determines if the maps is exported as vector graphics or as an image. This isfor specific cases where the basemap does not render properly in the PDF. The default value of this is False. |
 | dpi       | Integer | True     | This optional parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 300.                                                                                  |
 
-
 ### PDF Management
 
 This workflow sorts and creates consolidated versions of the exported pdf maps produced by map series. This workflow can 

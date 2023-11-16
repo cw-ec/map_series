@@ -38,8 +38,17 @@ class MapPdfSort:
             self.logger.info(f"Sorting: {file.name}")
             copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
 
-    def __init__(self, dump_dir, sorted_dir) -> None:
+    def is_valid(self, dump_dir, sorted_dir):
+        """Validates class inputs"""
+        if not isinstance(dump_dir, str):
+            raise Exception("Input dump_dir must be a string")
+        if not isinstance(sorted_dir, str):
+            raise Exception("Input sorted_dir must be a string")
 
+    def __init__(self, dump_dir, sorted_dir) -> None:
+        # Validate inputs
+        self.is_valid(dump_dir, sorted_dir)
+        # Create Logger
         self.logger = logging_setup()
         self.logger.info(f"Sorting all PDF maps in: {dump_dir}")
         # Set Class Vars
@@ -104,7 +113,17 @@ class PDFConsolidator:
             if os.path.exists(out_base):
                 rmtree(out_base)
 
-    def __init__(self, in_dir, feds_to_combo=()):
+    def is_valid(self, in_dir, feds_to_combo):
+        """Validates Inputs"""
+        if not isinstance(in_dir, str):
+            raise Exception("in_dir must be a string")
+        if not isinstance(feds_to_combo, tuple) and not isinstance(feds_to_combo, list):
+            raise Exception("feds_to_combo must be either a list or tuple")
+
+    def __init__(self, in_dir, feds_to_combo=tuple()):
+
+        # Validate inputs
+        self.is_valid(in_dir, feds_to_combo)
 
         # Settable Inputs
         self.in_dir = in_dir
