@@ -16,3 +16,9 @@ def logging_setup(log_dir=".\\"):
         ]
     )
     return logging.getLogger()
+
+
+def create_dir(path:str) -> None:
+    """Check if directory exists and if it doesn't create it."""
+    if not os.path.exists(path):
+        os.makedirs(path)

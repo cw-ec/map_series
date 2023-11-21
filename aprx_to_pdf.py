@@ -18,7 +18,7 @@ similar tools available in ArcGIS Pro
 
 MapToPDF(
     aprx_path=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\MS338_P_LrgInset_Ont\MS338_P_LrgInset_Ont.aprx",
-    out_dir=".\\data\\map_dump",
+    out_dir=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\test_output",\
     as_image=True,
     dpi=300
 )

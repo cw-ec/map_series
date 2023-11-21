@@ -1,7 +1,8 @@
 import arcpy
 import os
 import sys
-from components import logging_setup
+import glob
+from components import logging_setup, create_dir
 
 arcpy.env.overwriteOutput = True  # Needed to overwrite existing outputs
 
@@ -47,7 +48,21 @@ class MapToPDF:
 
         self.logger.info('DONE!')
 
+    def is_valid(self, aprx_path, out_dir, as_image, dpi):
+        """Validates class inputs"""
+        if not isinstance(aprx_path, str):
+            raise Exception("Parameter 'aprx_path' must be a string")
+        if not isinstance(out_dir, str):
+            raise Exception("Parameter 'out_dir' must be a string")
+        if not isinstance(as_image, bool):
+            raise Exception("Parameter 'as_image' must be a boolean")
+        if not isinstance(dpi, int):
+            raise Exception("Parameter 'dpi' must be an integer")
+
     def __init__(self, aprx_path, out_dir, as_image=False, dpi=300):
+
+        # Validate inputs
+        self.is_valid(aprx_path, out_dir, as_image, dpi)
 
         # Settable params
         self.aprx_path = aprx_path
@@ -64,4 +79,54 @@ class MapToPDF:
         # Processing
         self.logger = logging_setup()
         self.logger.info('Export process started')
+        create_dir(self.out_dir)
         self.export_maps()
+
+
+class BulkMapToPDF:
+    """Bulk version of MapToPDF class allows for multiple aprx files to be exported into pdf files at once"""
+
+    def is_valid(self, in_dir, out_dir, to_pdf_list, as_image, dpi):
+        """checks class inputs to see if they are valid, Raise exception if not"""
+
+        if not isinstance(in_dir, str):
+            raise Exception("Parameter 'in_dir' must be a string")
+        if not isinstance(out_dir, str):
+            raise Exception("Parameter 'out_dir' must be a string")
+        if not isinstance(to_pdf_list, tuple) and not isinstance(to_pdf_list, list):
+            raise Exception("Parameter: 'to_pdf_list' must a tuple or a list")
+        if not isinstance(as_image, bool):
+            raise Exception("Parameter 'as_image' but be of type boolean")
+        if not isinstance(dpi, int):
+            raise Exception("Parameter 'dpi' must be an integer")
+
+    def bulk_export(self):
+        """Bulk exports input list of aprx files into pdfs"""
+        # Make the list of aprx files in the given directory and subdirectories
+        aprx_list = glob.glob(os.path.join(self.in_dir, '**\\*.aprx'), recursive=True)
+
+        # If the pdf list param is populated then filter the list to only include file names that appear in the list
+        if len(self.to_pdf_list) > 0:
+            aprx_list = [a for a in aprx_list if os.path.split(a)[-1] in self.to_pdf_list]
+
+        for aprx in aprx_list:
+            self.logger.info(f"Exporting aprx {aprx_list.index(aprx)+1} of {len(aprx_list)}: {os.path.split(aprx)[-1]}")
+            MapToPDF(aprx, self.out_dir, dpi=self.dpi)
+
+    def __init__(self, in_dir, out_dir, to_pdf_list=(), as_image=False, dpi=300):
+
+        # Validate Inputs
+        self.is_valid(in_dir, out_dir, to_pdf_list, as_image, dpi)
+
+        # Set Inputs
+        self.in_dir = in_dir
+        self.out_dir = out_dir
+        self.to_pdf_list = to_pdf_list
+        self.as_image = as_image
+        self.dpi = dpi
+
+        self.logger = logging_setup()
+
+        self.logger.info(f"Starting bulk export of {self.in_dir}")
+        self.bulk_export()
+        self.logger.info("DONE!")
