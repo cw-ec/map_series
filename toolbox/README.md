@@ -3,6 +3,12 @@
 This folder contains the files needed to run each workflow. Detailed descriptions of each tool and its parameters are given
 in this document which is reflected in .py files found in this folder.
 
+## Common Outputs
+
+All tools will produce a log file which will contain all messages and errors from the run of the tool. This allows for 
+a user to validate that tool finished processing or identify and error that occurred without needing the original window.
+
+
 ## Component 1: PDF Map Production and Post Processing
 
 Below is detailed documentation of each tool in component 1 dealing with the creation organization and manipulation of

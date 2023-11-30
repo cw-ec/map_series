@@ -16,6 +16,6 @@ This script takes 3 inputs parameters:
 
 UpdatePlaceNames(
         geo_name_url="https://ftp.cartes.canada.ca/pub/nrcan_rncan/vector/geobase_cgn_toponyme/prov_shp_eng/cgn_canada_shp_eng.zip",
-        output_gdb=".\\data\\MapSeriesGDB.gdb",
-        fed_num_fc=".\\data\\MapSeriesGDB.gdb\\EGD_REDIS_2023_FED_A_FINAL_CRT_Copied08Sept2023",
+        output_gdb="C:\\map_series_tests\\test.gdb",
+        fed_num_fc="C:\\map_series_tests\\MapSeriesGDB.gdb\\EGD_REDIS_2023_FED_A_FINAL_CRT_Copied08Sept2023",
     )

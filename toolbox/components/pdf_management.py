@@ -5,7 +5,7 @@ import os
 import errno
 from pathlib import Path
 from shutil import copyfile, rmtree, make_archive
-from components import logging_setup
+from toolbox.components import logging_setup
 
 
 class MapPdfSort:
