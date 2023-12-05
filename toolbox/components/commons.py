@@ -22,3 +22,18 @@ def create_dir(path:str) -> None:
     """Check if directory exists and if it doesn't create it."""
     if not os.path.exists(path):
         os.makedirs(path)
+
+def create_verify_gdf(gdb_path):
+    """Checks to see if input pdb path exists and if not create it"""
+    from arcpy import CreateFileGDB_management
+
+    if not os.path.exists(gdb_path):
+        root = os.path.split(gdb_path)[0]
+        gdb_name = os.path.split(gdb_path)[-1]
+
+        # If root doesn't exist create it
+        if not os.path.exists(root):
+                os.makedirs(root)
+
+        CreateFileGDB_management(root, gdb_name)
+

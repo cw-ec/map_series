@@ -19,6 +19,14 @@ class UpdatePlaceNames:
     The purpose of this script is to download the geoplacenames file and then save the subtypes (under the generic field) as
     separate featureclasses in a given geodatabase
     """
+    def is_valid(self, geo_name_url, out_gdb):
+        """Validates inputs and returns an exception is any input is invalid"""
+        if not isinstance(geo_name_url, str):
+            raise Exception(f"Parameter: geo_name_url must be a valid string and not {type(geo_name_url)}")
+        if not isinstance(out_gdb, str):
+            raise Exception(f"Parameter: out_gdb must be a string not {type(out_gdb)}")
+
+
 
     def download_data(self):
 
@@ -67,7 +75,7 @@ class UpdatePlaceNames:
             self.logger.info(f'Exporting: {stype_fc_name}')
             stype_data.spatial.to_featureclass(location=os.path.join(self.output_gdb, stype_fc_name))
 
-    def __init__(self, geo_name_url, output_gdb, fed_num_fc):
+    def __init__(self, geo_name_url, output_gdb, fed_num_fc, download_data=False):
 
         # Preset Attributes
         self.spatial_ref = '4269'

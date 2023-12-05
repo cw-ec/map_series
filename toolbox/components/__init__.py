@@ -3,3 +3,4 @@ from .configs import Configs
 from .pdf_management import MapPdfSort, PDFConsolidator
 from .update_placenames import UpdatePlaceNames
 from .export_to_pdf import MapToPDF, BulkMapToPDF
+from .concat_field import ConcatField

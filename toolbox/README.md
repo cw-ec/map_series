@@ -47,10 +47,10 @@ is called 'bulk_aprx_to_pdf.py' and it takes the following parameters:
 This workflow sorts and creates consolidated versions of the exported pdf maps produced by map series. This workflow can 
 be accessed via the pdf_manager.py script which takes the following parameters:
 
-| Name       | Type   | Required | Description                                                                                                                                                                                              |
-|------------|--------|----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| dump_dir   | string | Required | This is the path to the folder containing all the pdf files exported from map series. All pdfs in this folder must meet the required naming convention in order to be properly processed by this script. |
-| sorted_dir | string | Required | This should be the path to the destination folder for the pdfs. It can either be empty or contain outputs from a previous run of this script.                                                            |
+| Name       |   Type   |  Required  | Description                                                                                                                                                                                              |
+|------------|:--------:|:----------:|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| dump_dir   |  string  |  Required  | This is the path to the folder containing all the pdf files exported from map series. All pdfs in this folder must meet the required naming convention in order to be properly processed by this script. |
+| sorted_dir |  string  |  Required  | This should be the path to the destination folder for the pdfs. It can either be empty or contain outputs from a previous run of this script.                                                            |
 
 ### PDF Consolidation
 
@@ -59,13 +59,13 @@ at the root of the directory that shares its FED Number.
 
 This workflow takes the following parameters:
 
-| Name          | Type           | Required | Description                                                                                                                                                     |
-|---------------|----------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| in_dir        | string         | Required | Path to the directory that contains all pdfs to be consolidated. Must be organized into the approved file structure for the map series project.                 |
-| feds_to_combo | array(integer) | Optional | This optional parameter should be and array of FED numbers as integers. Only pdfs in folders with this name will be consolidated when this parameter is filled. |
+| Name          |       Type       |  Required  | Description                                                                                                                                                     |
+|---------------|:----------------:|:----------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| in_dir        |      string      |  Required  | Path to the directory that contains all pdfs to be consolidated. Must be organized into the approved file structure for the map series project.                 |
+| feds_to_combo |  array(integer)  |  Optional  | This optional parameter should be and array of FED numbers as integers. Only pdfs in folders with this name will be consolidated when this parameter is filled. |
 
 
-## Component 2: Data Downloads and Updates
+## Component 2: Data Updates and Manipulation
 
 Below is detailed documentation of each tool in component 2 dealing with the ingestion an updating of data needed to 
 create the maps in maps series. At this time this section only contains example scripts.
@@ -75,8 +75,22 @@ create the maps in maps series. At this time this section only contains example 
 This script downloads and preprocesses the NRCan place names dataset for use in map creation. Not in full working order but 
 a skeleton for future development has been implemented in this repository as an example. 
 
-| Name         | Type   | Required | Description                                                                                                     |
-|--------------|--------|----------|-----------------------------------------------------------------------------------------------------------------|
-| geo_name_url | string | Required | This parameter is the url to the online zipfile that is to be downloaded and processed.                         |
-| output_gdb   | string | Required | The gdb  in which the output feature classes will be placed. Should be preexisting.                             |
-| fed_num_fc   | String | Required | The full path to the feature class or shapefile that contains the FED data to be joined to the downloaded data. |
+| Name         |   Type   |  Required  | Description                                                                                                     |
+|--------------|:--------:|:----------:|-----------------------------------------------------------------------------------------------------------------|
+| geo_name_url |  string  |  Required  | This parameter is the url to the online zipfile that is to be downloaded and processed.                         |
+| output_gdb   |  string  |  Required  | The gdb  in which the output feature classes will be placed. Should be preexisting.                             |
+| fed_num_fc   |  String  |  Required  | The full path to the feature class or shapefile that contains the FED data to be joined to the downloaded data. |
+
+### Concatenate Field
+
+This script takes and excel document and concatenates the input field based on the id_field parameter. 
+
+| Name          |       Type        | Required | Description                                                                                                                                                                                                                                                       |
+|---------------|:-----------------:|:--------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| table         |      string       | Required | The path to the input excel file.                                                                                                                                                                                                                                 |
+| id_field      |      string       | Required | The name of the field that the records will be concatenated against.                                                                                                                                                                                              |
+| concat_field  |      string       | Required | The name of the field to be concatenated.                                                                                                                                                                                                                         |
+| out_directory |      string       | Required | The name of the directory that the concatenated file will be placed.                                                                                                                                                                                              |
+| separator     |      string       | Optional | This optional parameter is the character that will be used to separate the concatenated field. The default value for this parameter is: ';'.                                                                                                                      |
+| sheet_name    | integer or string | Optional | This optional parameter is the name or index of the sheet to be concatenated. If using indexes note that they start at 0 so the first sheet in the excel file will be index 0. The default vale for this parameter is the first sheet in the excel document or 0. |
+
