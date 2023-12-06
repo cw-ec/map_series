@@ -2,8 +2,8 @@ from toolbox.components import ConcatField
 
 """
 
-This tool concatonates a dataset and removes duplicates returning the concatenated field as a string with the values
-separated by a common character. This tool will take a column of values clean non-essential characters and concatentate
+This tool concatenates a dataset and removes duplicates returning the concatenated field as a string with the values
+separated by a common character. This tool will take a column of values clean non-essential characters and concatenate
 all the values by the separator character. This will be returned in a single row and duplicated rows would be not be
 retained.
 
@@ -40,8 +40,8 @@ This workflow takes the following parameters:
 ConcatField(
     table="C:\\map_series\\data\\EMV_Report_2021-09-20.xlsx",
     id_field='SITE_ID',
-    concat_field='Adv. / Ant.',
+    concat_field='PD / SV',
     out_directory="C:\\map_series\\data",
     separator=';',
-    sheet_name=1
+    sheet_name=0
 )

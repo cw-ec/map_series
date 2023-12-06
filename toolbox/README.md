@@ -83,7 +83,22 @@ a skeleton for future development has been implemented in this repository as an 
 
 ### Concatenate Field
 
-This script takes and excel document and concatenates the input field based on the id_field parameter. 
+This tool concatenates a dataset and removes duplicates returning the concatenated field as a string with the values
+separated by a common character. This tool will take a column of values clean non-essential characters and concatentate
+all the values by the separator character. This will be returned in a single row and duplicated rows would be not be
+retained.
+
+For example:
+
+        "002-0"
+        "003-1"
+        "005-0A"
+        "005-1B"
+        "010-9"
+
+Would be concatenated to:
+        
+        "2;3;5A;5B;10"  
 
 | Name          |       Type        | Required | Description                                                                                                                                                                                                                                                       |
 |---------------|:-----------------:|:--------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
