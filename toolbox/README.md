@@ -14,7 +14,7 @@ a user to validate that tool finished processing or identify and error that occu
 Below is detailed documentation of each tool in component 1 dealing with the creation organization and manipulation of
 map pdfs.
 
-### APRX to PDF
+### APRX to PDF (aprx_to_pdf.py)
 
 This workflow takes a .aprx file containing a map series and exports the maps as individual pdf files following the 
 approved naming convention: "FEDCount_PollType_MapType". If not following this naming convention the .aprx file will not
@@ -28,7 +28,7 @@ The main script for this workflow is called 'aprx_to_pdf.py' and it takes the fo
 | as_image  | Boolean | Optional | This parameter determines if the maps is exported as vector graphics or as an image. This is for specific cases where the basemap does not render properly in the PDF. The default value of this is False. |
 | dpi       | Integer | Optional | This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 300.                                                                                   |
 
-### Bulk APRX to PDF
+### Bulk APRX to PDF (bulk_aprx_to_pdf.py)
 
 This workflow utilizes the same code as the APRX to PDF script however this workflow add the functionality to bulk
 export the maps from the aprxs contained in a given directory and its subdirectories. The main script for this workflow 
@@ -42,7 +42,7 @@ is called 'bulk_aprx_to_pdf.py' and it takes the following parameters:
 | as_image    | Boolean | Optional | This parameter determines if the maps is exported as vector graphics or as an image. This is for specific cases where the basemap does not render properly in the PDF. The default value of this is False.                               |
 | dpi         | Integer | Optional | This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 300.                                                                                                                 |
 
-### PDF Management
+### PDF Management (pdf_manager.py)
 
 This workflow sorts and creates consolidated versions of the exported pdf maps produced by map series. This workflow can 
 be accessed via the pdf_manager.py script which takes the following parameters:
@@ -52,7 +52,7 @@ be accessed via the pdf_manager.py script which takes the following parameters:
 | dump_dir   |  string  |  Required  | This is the path to the folder containing all the pdf files exported from map series. All pdfs in this folder must meet the required naming convention in order to be properly processed by this script. |
 | sorted_dir |  string  |  Required  | This should be the path to the destination folder for the pdfs. It can either be empty or contain outputs from a previous run of this script.                                                            |
 
-### PDF Consolidation
+### PDF Consolidation (pdf_consolidation.py)
 
 This workflow consolidates pdf files based on the approved map series folder structure and exports them into a zipfile
 at the root of the directory that shares its FED Number.
@@ -68,9 +68,10 @@ This workflow takes the following parameters:
 ## Component 2: Data Updates and Manipulation
 
 Below is detailed documentation of each tool in component 2 dealing with the ingestion an updating of data needed to 
-create the maps in maps series. At this time this section only contains example scripts.
+create the maps in maps series. This includes tools that create custom fields, and custom subsets so that the data can
+be better utilized during the map creation phase.
 
-### Update PlaceNames
+### Update PlaceNames (update_placenames.py)
 
 This script downloads and preprocesses the NRCan place names dataset for use in map creation. Not in full working order but 
 a skeleton for future development has been implemented in this repository as an example. 
@@ -81,7 +82,7 @@ a skeleton for future development has been implemented in this repository as an 
 | output_gdb   |  string  |  Required  | The gdb  in which the output feature classes will be placed. Should be preexisting.                             |
 | fed_num_fc   |  String  |  Required  | The full path to the feature class or shapefile that contains the FED data to be joined to the downloaded data. |
 
-### Concatenate Field
+### Concatenate Field (field_concat.py)
 
 This tool concatenates a dataset and removes duplicates returning the concatenated field as a string with the values
 separated by a common character. This tool will take a column of values clean non-essential characters and concatentate
@@ -108,4 +109,3 @@ Would be concatenated to:
 | out_directory |      string       | Required | The name of the directory that the concatenated file will be placed.                                                                                                                                                                                              |
 | separator     |      string       | Optional | This optional parameter is the character that will be used to separate the concatenated field. The default value for this parameter is: ';'.                                                                                                                      |
 | sheet_name    | integer or string | Optional | This optional parameter is the name or index of the sheet to be concatenated. If using indexes note that they start at 0 so the first sheet in the excel file will be index 0. The default vale for this parameter is the first sheet in the excel document or 0. |
-

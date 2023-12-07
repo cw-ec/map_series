@@ -49,7 +49,7 @@ def to_dataframe(to_import: str, sheet=0) -> pd.DataFrame:
     """
 
     path_list = os.path.split(to_import)
-    f_type = path_list[0].split('.')[-1]
+    f_type = path_list[-1].split('.')[-1]
 
     if f_type == 'csv':
         return pd.read_csv(to_import)

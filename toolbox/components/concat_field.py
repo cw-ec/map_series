@@ -1,4 +1,5 @@
 import sys, os
+import csv
 import pandas as pd
 from toolbox.components import logging_setup, create_dir, to_dataframe
 
@@ -27,7 +28,7 @@ class ConcatField:
                     suffix = c.split('-')[1]
 
                     prefix = prefix.lstrip('0')  # Strip all 0's from the start of the prefix
-                    suffix = ''.join([d for d in suffix if not d.isdigit()])  # Drop all numbers from the suffix
+                    suffix = ''.join([d for d in suffix if not (d.isdigit()) or (d != "0")])  # Drop all numbers from the suffix
 
                     to_concat.append(f"{prefix}{suffix}")
                 elif isinstance(c, int):
@@ -37,7 +38,7 @@ class ConcatField:
 
             # Create the concatenation or create a warning
             if len(to_concat) == 1:
-                concated = f"{to_concat[0]}{self.separator}"
+                concated = str(to_concat[0])
             elif len(to_concat) > 1:
                 concated = f'{self.separator}'.join(to_concat)
             else:
@@ -52,7 +53,9 @@ class ConcatField:
         out_df[self.out_field] = out_df[self.out_field].astype(object)
         out_df.drop(labels=self.concat_field, axis=1, inplace=True)  # Drop the concat_field as it is no longer needed
         self.logger.info(f"Exporting: {self.in_tbl_nme}_concatenated.csv")
-        out_df.to_csv(os.path.join(self.out_directory, f"{self.in_tbl_nme}_concatenated.csv"), index=False)
+        out_df.to_csv(os.path.join(self.out_directory, f"{self.in_tbl_nme}_concatenated.csv"),
+                      index=False,
+                      )
 
     def is_valid(self, table, id_field, concat_field, out_directory, separator=';', sheet_name=0):
         """Validates the inputs"""
