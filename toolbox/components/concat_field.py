@@ -28,7 +28,9 @@ class ConcatField:
                     suffix = c.split('-')[1]
 
                     prefix = prefix.lstrip('0')  # Strip all 0's from the start of the prefix
-                    suffix = ''.join([d for d in suffix if not (d.isdigit()) or (d != "0")])  # Drop all numbers from the suffix
+                    suffix = ''.join([d for d in suffix if not (d.isdigit()) or (d != "0")])  # Drop all 0s from the suffix
+                    if len(suffix) and suffix[0].isdigit():
+                        suffix = f"-{suffix}"
 
                     to_concat.append(f"{prefix}{suffix}")
                 elif isinstance(c, int):

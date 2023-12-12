@@ -26,8 +26,6 @@ class UpdatePlaceNames:
         if not isinstance(out_gdb, str):
             raise Exception(f"Parameter: out_gdb must be a string not {type(out_gdb)}")
 
-
-
     def download_data(self):
 
         """ Downloads a zipfile from a specified source and unzips the contents to the out directory"""

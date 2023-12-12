@@ -8,10 +8,30 @@ in this document which is reflected in .py files found in this folder.
 All tools will produce a log file which will contain all messages and errors from the run of the tool. This allows for 
 a user to validate that tool finished processing or identify and error that occurred without needing the original window.
 
+The contents of the lof file will look like this:
+
+    2023-11-22 11:23:13,832 [INFO] Export process started
+    2023-11-22 11:23:25,432 [INFO] Exporting:P_35083_B01
+    2023-11-22 11:23:51,729 [INFO] Page Exported
+    2023-11-22 11:23:51,735 [INFO] Exporting:P_35083_B02
+    2023-11-22 11:24:05,163 [INFO] Page Exported
+    2023-11-22 11:24:05,170 [INFO] Exporting:P_35083_B03
+    2023-11-22 11:24:18,131 [INFO] Page Exported
+    2023-11-22 11:24:18,139 [INFO] Exporting:P_35083_B04
+    2023-11-22 11:24:31,258 [INFO] Page Exported
+    2023-11-22 11:24:31,259 [INFO] DONE!
+
+Note that the above log contains a timestamp, the type of information the message is intended to convey and the message itself.
+There are several  type fo message that could be conveyed.
+
+- INFO: Standard Message meant to convey some generic status of the tool
+- WARNING: Something has occurred while running the tool that raised a warning. While the tool will still continue to run
+            after a warning it would be noted as whatever caused the warning may effect the  quality output.
+- ERROR: An error has occurred that has caused the tool to fail. No outputs are produced when an error occurs. 
 
 ## Component 1: PDF Map Production and Post Processing
 
-Below is detailed documentation of each tool in component 1 dealing with the creation organization and manipulation of
+Below is detailed documentation of each tool in component 1 dealing with the creation, organization, and manipulation of
 map pdfs.
 
 ### APRX to PDF (aprx_to_pdf.py)
@@ -85,21 +105,21 @@ a skeleton for future development has been implemented in this repository as an 
 ### Concatenate Field (field_concat.py)
 
 This tool concatenates a dataset and removes duplicates returning the concatenated field as a string with the values
-separated by a common character. This tool will take a column of values clean non-essential characters and concatentate
-all the values by the separator character. This will be returned in a single row and duplicated rows would be not be
+separated by a common character. This tool will take a column of values cleans non-essential characters and concatenates
+all the values using the separator character. This will be returned in a single row and duplicated rows would be not be
 retained.
 
 For example:
 
         "002-0"
-        "003-1"
+        "403-1"
         "005-0A"
         "005-1B"
         "010-9"
 
 Would be concatenated to:
         
-        "2;3;5A;5B;10"  
+        "2;403-1;5A;5-1B;10-9"  
 
 | Name          |       Type        | Required | Description                                                                                                                                                                                                                                                       |
 |---------------|:-----------------:|:--------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|

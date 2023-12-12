@@ -10,14 +10,14 @@ retained.
 For example:
 
         "002-0"
-        "003-1"
+        "403-1"
         "005-0A"
         "005-1B"
         "010-9"
 
 Would be concatenated to:
         
-        "2;3;5A;5B;10"        
+        "2;403-1;5A;5-1B;10-9"       
 
 This workflow takes the following parameters:
 
