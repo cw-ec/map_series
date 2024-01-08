@@ -93,14 +93,21 @@ be better utilized during the map creation phase.
 
 ### Update PlaceNames (update_placenames.py)
 
-This script downloads and preprocesses the NRCan place names dataset for use in map creation. Not in full working order but 
-a skeleton for future development has been implemented in this repository as an example. 
+This script downloads and preprocesses the NRCan place names dataset for use in map creation. This script downloads the 
+data from the source and adds it as subsets to a given geodatabase. These subsets are predefined and are used as part of 
+the mapping process. To add a subset the source code of the script will need to be altered. There is an options to download
+the data again if it has been updated. When downloaded the subsets will be created from that downloaded shapefile. If the 
+option to download the data is not selected please ensure that the placenames file is placed in a folder called 'data' at the
+root of this repository or the tool will not function as expected. Ensure that the shapefile retains its original name
+"cgn_canada_shp_eng.shp" and that all fields retain their original names.
 
-| Name         |   Type   |  Required  | Description                                                                                                     |
-|--------------|:--------:|:----------:|-----------------------------------------------------------------------------------------------------------------|
-| geo_name_url |  string  |  Required  | This parameter is the url to the online zipfile that is to be downloaded and processed.                         |
-| output_gdb   |  string  |  Required  | The gdb  in which the output feature classes will be placed. Should be preexisting.                             |
-| fed_num_fc   |  String  |  Required  | The full path to the feature class or shapefile that contains the FED data to be joined to the downloaded data. |
+| Name              |  Type   | Required | Description                                                                                                                                                                                            |
+|-------------------|:-------:|:--------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| geo_name_url      | string  | Required | This parameter is the url to the online zipfile that is to be downloaded and processed.                                                                                                                |
+| output_gdb        | string  | Required | The gdb  in which the output feature classes will be placed. Should be preexisting.                                                                                                                    |
+| fed_num_fc        | String  | Required | The full path to the feature class or shapefile that contains the FED data to be joined to the downloaded data.                                                                                        |
+| download_new_data | Boolean | Optional | Download a new version of th NR placenames data from the source. The default value is False.                                                                                                           |
+| pn_shp_nme        | String  | Optional | Name of the shapefile to be subset. Default value is name downloaded from source do not change this parameter if downloading a new version of the data. The default value is "cgn_canada_shp_eng.shp". |
 
 ### Concatenate Field (field_concat.py)
 
