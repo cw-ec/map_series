@@ -2,7 +2,7 @@ import arcpy
 import os
 import sys
 import glob
-from toolbox.components import logging_setup, create_dir
+from commons import logging_setup, create_dir
 
 arcpy.env.overwriteOutput = True  # Needed to overwrite existing outputs
 
