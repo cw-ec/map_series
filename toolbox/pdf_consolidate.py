@@ -15,6 +15,6 @@ This workflow takes the following parameters:
 """
 
 PDFConsolidator(
-    in_dir=".\\data\\sorted",
+    in_dir="..\\data\\sorted",
     #feds_to_combo=[24002, 24013]
 )

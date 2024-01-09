@@ -5,7 +5,7 @@ import io
 import arcpy
 import pandas as pd
 import arcgis
-from commons import logging_setup, create_verify_gdf
+from . import logging_setup, create_verify_gdf
 from arcgis.features import GeoAccessor, GeoSeriesAccessor
 from arcgis.geometry import SpatialReference
 

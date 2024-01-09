@@ -1,6 +1,6 @@
 import sys, os
 import pandas as pd
-from commons import logging_setup, create_dir, to_dataframe
+from . import logging_setup, create_dir, to_dataframe
 
 
 class ConcatField:
