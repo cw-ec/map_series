@@ -136,3 +136,14 @@ Would be concatenated to:
 | out_directory |      string       | Required | The name of the directory that the concatenated file will be placed.                                                                                                                                                                                              |
 | separator     |      string       | Optional | This optional parameter is the character that will be used to separate the concatenated field. The default value for this parameter is: ';'.                                                                                                                      |
 | sheet_name    | integer or string | Optional | This optional parameter is the name or index of the sheet to be concatenated. If using indexes note that they start at 0 so the first sheet in the excel file will be index 0. The default vale for this parameter is the first sheet in the excel document or 0. |
+
+### Dissolver
+
+This tool takes
+
+| Name        |     Type      | Required | Description                                                                                                                                                                                                                                                        |
+|-------------|:-------------:|:--------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| in_data     |    string     | Required | The path to the dataset that contains the features to be dissolved.                                                                                                                                                                                                |
+| out_gdb     |    string     | Required | The path to the geodatabase where the features will be created. If the geodatabase doesn't exist it will be created.                                                                                                                                               |
+| diss_fields | tuple or list | Optional | A list or tuple of field names (as string) that will be used to guide the dissolution tool. If an empty list is passed into this parameter then all geometry in the input dataset will be dissolved the default of this parameter is: ["ADV_UID", "SITE_AREA_UID"] |
+
