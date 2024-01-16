@@ -139,7 +139,7 @@ Would be concatenated to:
 
 ### Dissolver
 
-This tool takes
+This tool takes an input dataset and creates a dissolved version based on the input dissolve fields. Each dissolved version is placed in the output geodatabase.
 
 | Name        |     Type      | Required | Description                                                                                                                                                                                                                                                        |
 |-------------|:-------------:|:--------:|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
