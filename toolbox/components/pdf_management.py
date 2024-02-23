@@ -26,17 +26,28 @@ class MapPdfSort:
 
             ptype = file.name.split('_')[0]
             fed = file.name.split('_')[1]
-            suffix = file.name.split('_')[2].split('.')[0]
 
-            # Add a 0 for sorting purposes if the suffix of the file name looks like this: 'A1' -> 'A01'
-            if (suffix.split('.')[0][0].isalpha()) and (len(suffix) == 2):
-                suffix = f"{suffix[0]}0{suffix[1]}"
+            if ptype == 'InsetIndex':  # no suffix on inset reports use simplified workflow
 
-            out_pdf_path = os.path.join(self.sdir, fed, self.poll_type[ptype])
-            # Make sure output path exists. Create if needed
-            Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
-            self.logger.info(f"Sorting: {file.name}")
-            copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
+                fed = fed.split('.')[0] # needed because fed has the file type in it and it's not needed
+                out_pdf_path = os.path.join(self.sdir, fed)
+
+                Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
+                self.logger.info(f"Sorting: {file.name}")
+                copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}.pdf"))
+
+            else:  # Map PDF's have more components and need a more complex workflow
+                suffix = file.name.split('_')[2].split('.')[0]
+
+                # Add a 0 for sorting purposes if the suffix of the file name looks like this: 'A1' -> 'A01'
+                if (suffix.split('.')[0][0].isalpha()) and (len(suffix) == 2):
+                    suffix = f"{suffix[0]}0{suffix[1]}"
+
+                out_pdf_path = os.path.join(self.sdir, fed, self.poll_type[ptype])
+                # Make sure output path exists. Create if needed
+                Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
+                self.logger.info(f"Sorting: {file.name}")
+                copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
 
     def is_valid(self, dump_dir, sorted_dir):
         """Validates class inputs"""
