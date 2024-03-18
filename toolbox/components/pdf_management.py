@@ -20,12 +20,25 @@ class MapPdfSort:
         name of the pdf.
         """
 
+        def zip_folders(outdir, fedlist: list) -> None:
+            """Zips all fed folders that were just processed, delete the old folder structure"""
+            for fed in fedlist:
+                self.logger.info(f" Zipping: {fed}")
+                fed_path = Path(os.path.join(outdir, fed))
+                make_archive(str(fed_path), 'zip', root_dir=fed_path)
+                self.logger.info(f" Deleting original directory for {fed}")
+                if os.path.exists(fed_path):
+                    rmtree(fed_path)
+
         root = Path(self.ddir)
         # Iterate over the map pdf docs and sort them into the folder structure
+        fed_list = []
         for file in root.glob("*.pdf"):
 
             ptype = file.name.split('_')[0]
             fed = file.name.split('_')[1]
+            if fed not in fed_list:
+                fed_list.append(fed)
 
             if ptype == 'InsetIndex':  # no suffix on inset reports use simplified workflow
 
@@ -48,6 +61,10 @@ class MapPdfSort:
                 Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
                 self.logger.info(f"Sorting: {file.name}")
                 copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
+        self.logger.info("Zipping all dumped files")
+        # Zip all the folders that were just processed
+        zip_folders(outdir=self.sdir, fedlist=fed_list)
+
 
     def is_valid(self, dump_dir, sorted_dir):
         """Validates class inputs"""
