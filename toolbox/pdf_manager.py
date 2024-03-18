@@ -16,6 +16,6 @@ Parameters:
 """
 
 MapPdfSort(
-    dump_dir=r'J:\DMT Map Series Analysis\Tests\TestData_Chris\InsetIndex',
-    sorted_dir=r'J:\DMT Map Series Analysis\Tests\TestData_Chris\test_output\\sorted'
+    dump_dir=r'C:\map_series\data\Dump_AllMaps',
+    sorted_dir=r'C:\map_series\out_tests'
 )
