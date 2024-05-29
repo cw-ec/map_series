@@ -12,10 +12,10 @@ Parameters:
 
     sorted_dir: This should be the path to the destination folder for the pdfs. It can either be empty or contain 
                 outputs from a previous run of this script.   
-
+`
 """
 
 MapPdfSort(
-    dump_dir=r'C:\map_series\data\Dump_AllMaps',
+    dump_dir=r'C:\map_series\data\map_dump2',
     sorted_dir=r'C:\map_series\out_tests'
 )

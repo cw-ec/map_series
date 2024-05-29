@@ -42,7 +42,7 @@ class MapPdfSort:
             if fed not in fed_list:
                 fed_list.append(fed)
 
-            if ptype == 'InsetIndex':  # no suffix on inset reports use simplified workflow
+            if (ptype == 'InsetIndex_IndexCartons') or (ptype == 'IndexCartons_InsetIndex'):  # no suffix on inset reports use simplified workflow
 
                 fed = fed.split('.')[0] # needed because fed has the file type in it and it's not needed
                 out_pdf_path = os.path.join(self.sdir, fed)
@@ -104,7 +104,7 @@ class PDFConsolidator:
         def silent_remove(filename):
             try:
                 os.remove(filename)
-            except OSError as e:  # this would be "except OSError, e:" before Python 2.6
+            except OSError as e:
                 if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory
                     raise  # re-raise exception if a different error occurred
 
