@@ -25,15 +25,14 @@ class MapToPDF:
 
                     # Build PDF Name for export
                     pfed = ms.pageRow.FED_NUM
-                    ptype = aprx_name.split('_')[1][0]
                     num = pageNum
 
                     if pageNum < 10:
                         num = f"0{pageNum}"
 
-                    pnum = f"{self.map_types[aprx_name.split('_')[2]]}{num}"
+                    pnum = f"{self.map_types[aprx_name.split('_')[1]]}{num}"
 
-                    pdf_name = f"{ptype}_{pfed}_{pnum}"
+                    pdf_name = f"{pfed}_{pnum}"
 
                     self.logger.info(f'Exporting:{pdf_name}')
 
@@ -59,7 +58,7 @@ class MapToPDF:
         if not isinstance(dpi, int):
             raise Exception("Parameter 'dpi' must be an integer")
 
-    def __init__(self, aprx_path, out_dir, as_image=False, dpi=300):
+    def __init__(self, aprx_path, out_dir, as_image=False, dpi=150):
 
         # Validate inputs
         self.is_valid(aprx_path, out_dir, as_image, dpi)
@@ -113,7 +112,7 @@ class BulkMapToPDF:
             self.logger.info(f"Exporting aprx {aprx_list.index(aprx)+1} of {len(aprx_list)}: {os.path.split(aprx)[-1]}")
             MapToPDF(aprx, self.out_dir, dpi=self.dpi)
 
-    def __init__(self, in_dir, out_dir, to_pdf_list=(), as_image=False, dpi=300):
+    def __init__(self, in_dir, out_dir, to_pdf_list=(), as_image=False, dpi=150):
 
         # Validate Inputs
         self.is_valid(in_dir, out_dir, to_pdf_list, as_image, dpi)
