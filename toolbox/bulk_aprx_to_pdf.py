@@ -21,7 +21,7 @@ version will iterate over several aprx projects instead of being limited to just
 
 BulkMapToPDF(
     in_dir=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\New_343",
-    out_dir=".\\data\\map_dump",
+    out_dir=".\\data\\pdf",
     #as_image=True,
     #dpi=96
 )

@@ -38,7 +38,7 @@ class MapPdfSort:
         for file in root.glob("*.pdf"):
 
             ptype = file.name.split('_')[0]
-            fed = file.name.split('_')[1].split('.')[0]
+            fed = file.name.split('_')[0].split('.')[0]
             if fed not in fed_list:
                 fed_list.append(fed)
 
@@ -52,17 +52,23 @@ class MapPdfSort:
                 copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}.pdf"))
 
             else:  # Map PDF's have more components and need a more complex workflow
-                suffix = file.name.split('_')[2].split('.')[0]
+                suffix = file.name.split('_')[-1].split('.')[0]
 
                 # Add a 0 for sorting purposes if the suffix of the file name looks like this: 'A1' -> 'A01'
                 if (suffix.split('.')[0][0].isalpha()) and (len(suffix) == 2):
                     suffix = f"{suffix[0]}0{suffix[1]}"
 
-                out_pdf_path = os.path.join(self.sdir, fed, self.poll_type[ptype])
+                # Folder names differ by province
+                if (int(fed) >= 24000) and (int(fed) < 25000):  # Quebec
+                    subdir = 'cartes_maps'
+                else:  # RoC
+                    subdir = 'maps_cartes'
+
+                out_pdf_path = os.path.join(self.sdir, fed, subdir)
                 # Make sure output path exists. Create if needed
                 Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
                 self.logger.info(f"Sorting: {file.name}")
-                copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}_{suffix}.pdf"))
+                copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{fed}_{suffix}.pdf"))
 
         self.logger.info("Zipping all dumped files")
         # Zip all the folders that were just processed

@@ -128,4 +128,4 @@ class BulkMapToPDF:
 
         self.logger.info(f"Starting bulk export of {self.in_dir}")
         self.bulk_export()
-        self.logger.info("DONE!")
+        self.logger.info("Bulk Export Complete!")
