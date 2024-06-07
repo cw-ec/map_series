@@ -8,7 +8,7 @@ in this document which is reflected in .py files found in this folder.
 All tools will produce a log file which will contain all messages and errors from the run of the tool. This allows for 
 a user to validate that tool finished processing or identify and error that occurred without needing the original window.
 
-The contents of the lof file will look like this:
+The contents of the log file will look like this:
 
     2023-11-22 11:23:13,832 [INFO] Export process started
     2023-11-22 11:23:25,432 [INFO] Exporting:P_35083_B01
@@ -22,17 +22,20 @@ The contents of the lof file will look like this:
     2023-11-22 11:24:31,259 [INFO] DONE!
 
 Note that the above log contains a timestamp, the type of information the message is intended to convey and the message itself.
-There are several  type fo message that could be conveyed.
+There are several types of message that can be conveyed in this file.
 
 - INFO: Standard Message meant to convey some generic status of the tool
 - WARNING: Something has occurred while running the tool that raised a warning. While the tool will still continue to run
-            after a warning it would be noted as whatever caused the warning may effect the  quality output.
+            after a warning it would be noted as whatever caused the warning may affect the  quality output.
 - ERROR: An error has occurred that has caused the tool to fail. No outputs are produced when an error occurs. 
+
+The majority of all messages will be INFO used to indicate the tools progress in its process. Any WARNING or ERROR messages
+should be considered abnormal as they indicate a problem and should be investigated.
 
 ## Component 1: PDF Map Production and Post Processing
 
-Below is detailed documentation of each tool in component 1 dealing with the creation, organization, and manipulation of
-map pdfs.
+The section below contains detailed documentation for each tool in component 1 dealing with the creation, organization, 
+and manipulation of map pdfs.
 
 ### APRX to PDF (aprx_to_pdf.py)
 
@@ -46,7 +49,7 @@ The main script for this workflow is called 'aprx_to_pdf.py' and it takes the fo
 | aprx_path | String  | Required | This parameter is the path to the .aprx file that contains the maps to be exported.                                                                                                                        |
 | out_dir   | String  | Required | This parameter should link to the directory will take the exported maps. If maps of a matching name are present in the file then they will be overwritten by the new maps.                                 |
 | as_image  | Boolean | Optional | This parameter determines if the maps is exported as vector graphics or as an image. This is for specific cases where the basemap does not render properly in the PDF. The default value of this is False. |
-| dpi       | Integer | Optional | This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 300.                                                                                   |
+| dpi       | Integer | Optional | This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 150.                                                                                   |
 
 ### Bulk APRX to PDF (bulk_aprx_to_pdf.py)
 
@@ -60,7 +63,7 @@ is called 'bulk_aprx_to_pdf.py' and it takes the following parameters:
 | out_dir     | String  | Required | This parameter should link to the directory will take the exported maps. If maps of a matching name are present in the file then they will be overwritten by the new maps.                                                               |
 | to_pdf_list |  List   | Optional | This parameter should contain a list of all aprx files to convert into pdf files. This option should be used when only needing to convert a subset of aprx files available in the input directory. Otherwise leave this parameter blank. |
 | as_image    | Boolean | Optional | This parameter determines if the maps is exported as vector graphics or as an image. This is for specific cases where the basemap does not render properly in the PDF. The default value of this is False.                               |
-| dpi         | Integer | Optional | This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 300.                                                                                                                 |
+| dpi         | Integer | Optional | This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter is 150.                                                                                                                 |
 
 ### PDF Management (pdf_manager.py)
 

@@ -6,19 +6,19 @@ More documentation to be added as development progresses.
 ### Requirements
 
 This project will require the installation of ArcGIS Pro as access to the default ArcGIS Pro python environment as well
-arcpy are required to run the projects workflows. Ensure that you have a valid licence associated with your installation
+as arcpy are required to run the projects workflows. Ensure that you have a valid licence associated with your installation
 of Arcgis Pro before running the scripts.
 
 ### Usage
 
-Each pf the workflows within this project follows a standardized structure and the instructions on how to use each 
+Each of the workflows within this project follows a standardized structure and the instructions on how to use each 
 workflow will be relatively similar. Any differences in instructions will be noted in the documentation for that specific
 workflow.
 
 To operate a tool follow these instructions:
     
-1. Select the appropriate .py file from the main folder of this repository and open it in the IDE of your choice 
-(Notepad++ is a good alternative if no traditional IDE is available).
+1. Select the appropriate .py file from the main folder of this repository and open it in an IDE. At Elections Canada Visual 
+Studio Code is available for this purpose (Notepad++ is an alternative text editor).
 2. Alter the parameters to reflect your desired inputs referring to the descriptions within the .py file or in the workflows 
 documentation as needed.
 3. If running the file from an IDE (pycharm, VScode, etc.) run the file as normal. If an IDE is not available to you see 

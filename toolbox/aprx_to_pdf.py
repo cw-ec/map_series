@@ -9,7 +9,7 @@ similar tools available in ArcGIS Pro
     out_dir: This Parameter should link to the directory will take the exported maps. If maps of a matching name are 
              present in the file then they will be overwritten by the new maps.
     
-    as_image: This optional parameter determines if the maps is exported as vector graphics or as an image. This is 
+    as_image: This optional parameter determines if the map is exported as vector graphics or as an image. This is 
               for specific cases where the basemap does not render properly in the PDF. The default value of this is 
               False.
     dpi: This optional parameter sets the dpi of the output PDF which effects its resolution. The default value for 
@@ -17,8 +17,8 @@ similar tools available in ArcGIS Pro
 """
 
 MapToPDF(
-    aprx_path=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\MS338_P_LrgInset_Ont\MS338_P_LrgInset_Ont.aprx",
+    aprx_path=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\New_343\MS343_LrgInset_PEI\MS343_LrgInset_PEI.aprx",
     out_dir="..\\data\\pdf",
     as_image=True,
-    dpi=300
+    dpi=150
 )

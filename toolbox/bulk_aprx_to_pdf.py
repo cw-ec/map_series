@@ -20,9 +20,8 @@ version will iterate over several aprx projects instead of being limited to just
 """
 
 BulkMapToPDF(
-    in_dir=".\\data",
+    in_dir=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\New_343",
     out_dir=".\\data\\map_dump",
-    #to_pdf_list=['MS338_ADV_SmlInset_Ont_Landscape.aprx', 'MS338_ADV_SmlInset_Ont_Portrait.aprx'],
     #as_image=True,
     #dpi=96
 )
