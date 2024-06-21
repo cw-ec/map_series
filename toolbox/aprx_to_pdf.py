@@ -12,12 +12,17 @@ similar tools available in ArcGIS Pro
     as_image: This optional parameter determines if the map is exported as vector graphics or as an image. This is 
               for specific cases where the basemap does not render properly in the PDF. The default value of this is 
               False.
+    
     dpi: This optional parameter sets the dpi of the output PDF which effects its resolution. The default value for 
-         this parameter is 300.   
+         this parameter is 300.
+    
+    page_number_field_name: This optional parameter sets the field used as the page number in the map series. It also 
+                            uses the values in this field to set the name for each pdf documents. The default value for 
+                            this parameter is "PageCode".   
 """
 
 MapToPDF(
-    aprx_path=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\New_343\MS343_LrgInset_PEI\MS343_LrgInset_PEI.aprx",
+    aprx_path=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\New_343\MS343_OV_PEI_RuraMed\MS343_OV_PEI_RuralMed.aprx",
     out_dir="..\\data\\pdf",
     as_image=True,
     dpi=150

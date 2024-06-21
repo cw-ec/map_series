@@ -2,6 +2,9 @@ import arcpy
 import os
 import sys
 import glob
+import pandas as pd
+from arcgis.features import GeoAccessor, GeoSeriesAccessor
+from arcgis.geometry import SpatialReference
 from . import logging_setup, create_dir
 
 arcpy.env.overwriteOutput = True  # Needed to overwrite existing outputs
@@ -15,39 +18,35 @@ class MapToPDF:
         # Load the chosen pro project and take the first layout
         p = arcpy.mp.ArcGISProject(self.aprx_path)
         llayouts = p.listLayouts()[0]
-        aprx_name = os.path.split(self.aprx_path)[-1]
         # If a layout exists then export the maps
         if not (llayouts.mapSeries is None):
             ms = llayouts.mapSeries
             if ms.enabled:
                 # Create a pdf file for each page in the layout
-                for pageNum in range(1, ms.pageCount+1):
+                index_df = pd.DataFrame.spatial.from_featureclass(ms.indexLayer.dataSource)
+                for pageNum in index_df['PageCode'].values.tolist():
 
-                    # Build PDF Name for export
-                    pfed = ms.pageRow.FED_NUM
-                    num = pageNum
+                    try:
+                        ms.currentPageNumber = pageNum  # Set the active map
+                    except ValueError:
+                        # In some cases there are pages in the list that are not in the map series we are working with in those cases skip them
+                        continue
 
-                    if pageNum < 10:
-                        num = f"0{pageNum}"
-
-                    pnum = f"{self.map_types[aprx_name.split('_')[1]]}{num}"
-
-                    pdf_name = f"{pfed}_{pnum}"
-
-                    self.logger.info(f'Exporting:{pdf_name}')
-
+                    self.logger.info(f"Exporting: {pageNum}")
+                    # Set PDF Name for export
+                    pdf_name = pageNum  # Set the name here incase edits are needed in the future
                     ms.exportToPDF(os.path.join(self.out_dir, pdf_name),
-                                   page_range_type="RANGE",
-                                   # Needed to ensure the range of pages we want is used in the export
-                                   page_range_string=str(pageNum),  # Exports the specific page we want
+                                   page_range_type="CURRENT",
+                                   #page_range_string=f'{pageNum}',
                                    resolution=self.dpi,  # DPI of exported maps default is 96 usually set to 300
-                                   output_as_image=self.as_image  # As image is needed as some maps will have grey patches if exported as vector graphics
+                                   output_as_image=self.as_image
+                                   # As image is needed as some maps will have grey patches if exported as vector graphics
                                    )
-                    self.logger.info('Page Exported')
+                    self.logger.info('PDF Exported')
 
         self.logger.info('DONE!')
 
-    def is_valid(self, aprx_path, out_dir, as_image, dpi):
+    def is_valid(self, aprx_path, out_dir, as_image, dpi, page_number_field_name):
         """Validates class inputs"""
         if not isinstance(aprx_path, str):
             raise Exception("Parameter 'aprx_path' must be a string")
@@ -57,23 +56,20 @@ class MapToPDF:
             raise Exception("Parameter 'as_image' must be a boolean")
         if not isinstance(dpi, int):
             raise Exception("Parameter 'dpi' must be an integer")
+        if not isinstance(page_number_field_name, str):
+            raise Exception(f"Parameter 'page_number_field_name' must be of type string")
 
-    def __init__(self, aprx_path, out_dir, as_image=False, dpi=150):
+    def __init__(self, aprx_path, out_dir, as_image=False, dpi=150, page_number_field_name="PageCode"):
 
         # Validate inputs
-        self.is_valid(aprx_path, out_dir, as_image, dpi)
+        self.is_valid(aprx_path, out_dir, as_image, dpi, page_number_field_name)
 
         # Settable params
         self.aprx_path = aprx_path
         self.out_dir = out_dir
         self.as_image = as_image
         self.dpi = dpi
-
-        # Preset params
-        self.map_types = {'OV': '',
-                          'SmlInset': 'A',
-                          'LrgInset': 'B'
-                          }
+        self.pg_nbr_fld_nme = page_number_field_name
 
         # Processing
         self.logger = logging_setup()
@@ -85,7 +81,7 @@ class MapToPDF:
 class BulkMapToPDF:
     """Bulk version of MapToPDF class allows for multiple aprx files to be exported into pdf files at once"""
 
-    def is_valid(self, in_dir, out_dir, to_pdf_list, as_image, dpi):
+    def is_valid(self, in_dir, out_dir, to_pdf_list, as_image, dpi, page_number_field_name):
         """checks class inputs to see if they are valid, Raise exception if not"""
 
         if not isinstance(in_dir, str):
@@ -98,6 +94,8 @@ class BulkMapToPDF:
             raise Exception("Parameter 'as_image' but be of type boolean")
         if not isinstance(dpi, int):
             raise Exception("Parameter 'dpi' must be an integer")
+        if not isinstance(page_number_field_name, str):
+            raise Exception(f"Parameter 'page_number_field_name' must be of type string")
 
     def bulk_export(self):
         """Bulk exports input list of aprx files into pdfs"""
@@ -110,12 +108,12 @@ class BulkMapToPDF:
 
         for aprx in aprx_list:
             self.logger.info(f"Exporting aprx {aprx_list.index(aprx)+1} of {len(aprx_list)}: {os.path.split(aprx)[-1]}")
-            MapToPDF(aprx, self.out_dir, dpi=self.dpi)
+            MapToPDF(aprx, self.out_dir, dpi=self.dpi, page_number_field_name=self.pg_nbr_fld_nme)
 
-    def __init__(self, in_dir, out_dir, to_pdf_list=(), as_image=False, dpi=150):
+    def __init__(self, in_dir, out_dir, to_pdf_list=(), as_image=False, dpi=150, page_number_field_name="PageCode"):
 
         # Validate Inputs
-        self.is_valid(in_dir, out_dir, to_pdf_list, as_image, dpi)
+        self.is_valid(in_dir, out_dir, to_pdf_list, as_image, dpi, page_number_field_name)
 
         # Set Inputs
         self.in_dir = in_dir
@@ -123,6 +121,7 @@ class BulkMapToPDF:
         self.to_pdf_list = to_pdf_list
         self.as_image = as_image
         self.dpi = dpi
+        self.pg_nbr_fld_nme = page_number_field_name
 
         self.logger = logging_setup()
 
