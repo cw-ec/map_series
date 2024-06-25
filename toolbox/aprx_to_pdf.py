@@ -14,7 +14,7 @@ similar tools available in ArcGIS Pro
               False.
     
     dpi: This optional parameter sets the dpi of the output PDF which effects its resolution. The default value for 
-         this parameter is 300.
+         this parameter is 150 (dpi).
     
     page_number_field_name: This optional parameter sets the field used as the page number in the map series. It also 
                             uses the values in this field to set the name for each pdf documents. The default value for 
@@ -22,8 +22,9 @@ similar tools available in ArcGIS Pro
 """
 
 MapToPDF(
-    aprx_path=r"J:\DMT Map Series Analysis\Tests\TestData_Chris\New_343\MS343_OV_PEI_RuraMed\MS343_OV_PEI_RuralMed.aprx",
+    aprx_path="..\\data\\example_aprx\\example_aprx.aprx",
     out_dir="..\\data\\pdf",
-    as_image=True,
-    dpi=150
+    as_image=False,
+    dpi=150,
+    page_number_field_name='PageCode'
 )

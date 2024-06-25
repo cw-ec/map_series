@@ -106,9 +106,14 @@ class BulkMapToPDF:
         if len(self.to_pdf_list) > 0:
             aprx_list = [a for a in aprx_list if os.path.split(a)[-1] in self.to_pdf_list]
 
-        for aprx in aprx_list:
-            self.logger.info(f"Exporting aprx {aprx_list.index(aprx)+1} of {len(aprx_list)}: {os.path.split(aprx)[-1]}")
-            MapToPDF(aprx, self.out_dir, dpi=self.dpi, page_number_field_name=self.pg_nbr_fld_nme)
+        if len(aprx_list) > 0:
+            for aprx in aprx_list:
+                self.logger.info(f"Exporting aprx {aprx_list.index(aprx)+1} of {len(aprx_list)}: {os.path.split(aprx)[-1]}")
+                MapToPDF(aprx, self.out_dir, dpi=self.dpi, page_number_field_name=self.pg_nbr_fld_nme)
+
+        else:
+            self.logger.info(f"Number of available aprx files that match input criteria == 0. Please check inputs and try again.")
+            sys.exit()
 
     def __init__(self, in_dir, out_dir, to_pdf_list=(), as_image=False, dpi=150, page_number_field_name="PageCode"):
 
