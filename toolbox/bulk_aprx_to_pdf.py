@@ -15,7 +15,7 @@ version will iterate over several aprx projects instead of being limited to just
                  this parameter should not be included in the tool call or should be commented out. 
     
     as_image: This parameter determines if the maps is exported as vector graphics or as an image. This is for specific 
-              cases where the basemap does not render properly in the PDF. The default value of this is False.                               
+              cases where the basemap does not render properly in the PDF. The default value of this is True.                               
     
     dpi: This parameter sets the dpi of the output PDF which effects its resolution. The default value for this parameter 
          is 150 (dpi). 
@@ -31,7 +31,7 @@ BulkMapToPDF(
     in_dir="..\\data\\raw",
     out_dir="..\\data\\pdf",
     # to_pdf_list = [],
-    as_image=False,
+    as_image=True,
     dpi=150,
     page_number_field_name='PageCode'
 )

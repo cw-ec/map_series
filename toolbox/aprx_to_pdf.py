@@ -11,7 +11,7 @@ similar tools available in ArcGIS Pro
     
     as_image: This optional parameter determines if the map is exported as vector graphics or as an image. This is 
               for specific cases where the basemap does not render properly in the PDF. The default value of this is 
-              False.
+              True.
     
     dpi: This optional parameter sets the dpi of the output PDF which effects its resolution. The default value for 
          this parameter is 150 (dpi).
@@ -24,7 +24,7 @@ similar tools available in ArcGIS Pro
 MapToPDF(
     aprx_path="..\\data\\example_aprx\\example_aprx.aprx",
     out_dir="..\\data\\pdf",
-    as_image=False,
+    as_image=True,
     dpi=150,
     page_number_field_name='PageCode'
 )
