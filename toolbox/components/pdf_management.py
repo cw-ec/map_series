@@ -57,14 +57,13 @@ class MapPdfSort:
             if fed not in fed_list:
                 fed_list.append(fed)
 
-            if (ptype == 'InsetIndex_IndexCartons') or (ptype == 'IndexCartons_InsetIndex'):  # no suffix on inset reports use simplified workflow
+            if (ptype == 'InsetIndex') or (ptype == 'IndexCartons'):  # no suffix on inset reports use simplified workflow
 
-                fed = fed.split('.')[0] # needed because fed has the file type in it and it's not needed
                 out_pdf_path = os.path.join(self.sdir, fed)
 
                 Path(out_pdf_path).mkdir(parents=True, exist_ok=True)
                 self.logger.info(f"Sorting: {file.name}")
-                copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{ptype}_{fed}.pdf"))
+                copyfile(os.path.join(root, file.name), os.path.join(out_pdf_path, f"{file.name}"))
 
             else:  # Map PDF's have more components and need a more complex workflow
                 suffix = file.name.split('_')[-1].split('.')[0]
