@@ -1,7 +1,7 @@
 # Map Series
 
- The purpose of this repository is for development and testing various components of the map series proof of concept (PoC).
-More documentation to be added as development progresses.
+This repository contains all tools associated with the production and manipulation of map series products. Further
+descriptions of each individual tool can be found in the readme file contained in the toolbox directory.
 
 ### Requirements
 

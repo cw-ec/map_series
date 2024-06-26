@@ -46,6 +46,14 @@ class MapPdfSort:
         for file in pdf_list:
             ptype = file.name.split('_')[0]
             fed = file.name.split('_')[0].split('.')[0]
+
+            # For those inset index cases.
+            if not fed.isdigit():
+                fed = file.name.split('_')[-1].split('.')[0]
+                if not fed.isdigit():  #  If value is still not numeric after this return warning and continue
+                    self.logger.warning(f"{file.name} does not fit the naming convention for sorting. Skipping file.")
+                    continue
+
             if fed not in fed_list:
                 fed_list.append(fed)
 
