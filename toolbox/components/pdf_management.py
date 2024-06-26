@@ -35,8 +35,15 @@ class MapPdfSort:
         root = Path(self.ddir)
         # Iterate over the map pdf docs and sort them into the folder structure
         fed_list = []
-        for file in root.glob("*.pdf"):
+        pdf_list = list(root.glob("*.pdf"))  # Create the list of pdf files in the dump directory
 
+        # If there are no pdf files don't both sorting the empty list
+        if len(pdf_list) == 0:
+            self.logger.info(f"No PDF files found in {self.ddir}. Please check 'dump_dir' parameter.")
+            sys.exit()
+
+        self.logger.info(f"Sorting {len(pdf_list)} pdfs")
+        for file in pdf_list:
             ptype = file.name.split('_')[0]
             fed = file.name.split('_')[0].split('.')[0]
             if fed not in fed_list:
@@ -85,15 +92,16 @@ class MapPdfSort:
     def __init__(self, dump_dir, sorted_dir) -> None:
         # Validate inputs
         self.is_valid(dump_dir, sorted_dir)
+
         # Create Logger
         self.logger = logging_setup()
-        self.logger.info(f"Sorting all PDF maps in: {dump_dir}")
-        # Set Class Vars
-        self.poll_type = {'A': 'ADV',
-                          'P': 'PollDay'}
 
+        # Set Class Vars
         self.ddir = dump_dir
         self.sdir = sorted_dir
+
+        self.logger.info(f"Sorting all PDF maps in: {self.ddir}")
+        self.logger.info(f"All sorted files to be placed in {self.sdir}")
 
         # Run process
         self.logger.info("Sorting maps in input directory")

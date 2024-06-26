@@ -16,6 +16,6 @@ Parameters:
 """
 
 MapPdfSort(
-    dump_dir=r'C:\map_series\toolbox\data\pdf',
-    sorted_dir=r'C:\map_series\toolbox\data\sorted'
+    dump_dir='C:\\map_series\\data\\pdf',
+    sorted_dir='C:\\map_series\\data\\sorted'
 )
